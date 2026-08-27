@@ -1,6 +1,7 @@
 # 로그 스케일 태양계 (Logarithmic Solar System)
 
 > **English:** The English version of this document is available in [README.md](README.md).
+> **prompt:** https://gist.github.com/plainOldCode/fb2e3ea48caada23107704628c2a9384
 
 **Vite + TypeScript(strict) + Three.js**로 만든 인터랙티브 3D 태양계 데모입니다. 태양부터 명왕성까지 그리고 주요 위성들을 실측 천문 데이터를 바탕으로 렌더링하며, 로그 거리 스케일과 가시성 보강 크기 스케일을 적용해 전체 계를 한 화면에 담습니다.
 
