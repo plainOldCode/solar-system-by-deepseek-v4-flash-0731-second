@@ -1,0 +1,380 @@
+:root {
+  --panel-bg: rgba(10, 14, 26, 0.55);
+  --panel-border: rgba(255, 255, 255, 0.12);
+  --text: #e8ecf5;
+  --muted: #9aa3b5;
+  --accent: #ffd54f;
+  --radius: 8px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  height: 100%;
+  overflow: hidden;
+  background: #04060c;
+  color: var(--text);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans KR",
+    sans-serif;
+}
+
+#app {
+  position: fixed;
+  inset: 0;
+}
+
+/* The WebGL + CSS2D canvas fills the viewport and stays interactive even when
+   the UI overlay is hidden. */
+#scene-root {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+#scene-root canvas {
+  width: 100%;
+  height: 100%;
+}
+
+/* ---- HUD overlay ---------------------------------------------------------- */
+#hud {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+}
+body.ui-hidden #hud,
+body.ui-hidden #header {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Always-accessible fixed toggle shown even when the UI overlay is hidden. */
+#ui-toggle {
+  position: fixed;
+  right: 14px;
+  bottom: 14px;
+  z-index: 40;
+  background: rgba(10, 14, 26, 0.7);
+  color: var(--text);
+  border: 1px solid var(--panel-border);
+  border-radius: 999px;
+  padding: 7px 12px;
+  font-size: 12px;
+  cursor: pointer;
+  backdrop-filter: blur(4px);
+  transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+#ui-toggle:hover {
+  background: rgba(255, 255, 255, 0.14);
+}
+#ui-toggle[aria-pressed="true"] {
+  background: rgba(255, 213, 79, 0.18);
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+header#header {
+  position: absolute;
+  top: 14px;
+  left: 14px;
+  pointer-events: auto;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: var(--panel-bg);
+  border: 1px solid var(--panel-border);
+  border-radius: var(--radius);
+  padding: 10px 14px;
+  backdrop-filter: blur(4px);
+}
+header#header h1 {
+  margin: 0;
+  font-size: 16px;
+  letter-spacing: 0.02em;
+}
+header#header p {
+  margin: 2px 0 0;
+  font-size: 11px;
+  color: var(--muted);
+}
+/* EN/한글 language switch: a compact pill inside the header. */
+#lang-toggle {
+  flex: 0 0 auto;
+  min-width: 42px;
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--text);
+  border: 1px solid var(--panel-border);
+  border-radius: 999px;
+  padding: 4px 10px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+}
+#lang-toggle:hover {
+  background: rgba(255, 255, 255, 0.16);
+  border-color: var(--accent);
+}
+
+#control-panel {
+  position: absolute;
+  top: 96px;
+  right: 14px;
+  width: 230px;
+  pointer-events: auto;
+  background: var(--panel-bg);
+  border: 1px solid var(--panel-border);
+  border-radius: var(--radius);
+  padding: 10px 12px;
+  backdrop-filter: blur(4px);
+  font-size: 12px;
+}
+
+#info-panel {
+  position: absolute;
+  top: 96px;
+  left: 14px;
+  width: 240px;
+  pointer-events: auto;
+  background: var(--panel-bg);
+  border: 1px solid var(--panel-border);
+  border-radius: var(--radius);
+  padding: 10px 12px;
+  backdrop-filter: blur(4px);
+  font-size: 12px;
+}
+
+#tooltip {
+  position: absolute;
+  z-index: 20;
+  pointer-events: none;
+  background: rgba(8, 10, 18, 0.85);
+  border: 1px solid var(--panel-border);
+  border-radius: 6px;
+  padding: 6px 9px;
+  font-size: 12px;
+}
+
+#disclaimer {
+  position: absolute;
+  bottom: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  max-width: 640px;
+  width: calc(100% - 24px);
+  text-align: center;
+  font-size: 11px;
+  color: var(--muted);
+  background: var(--panel-bg);
+  border: 1px solid var(--panel-border);
+  border-radius: var(--radius);
+  padding: 8px 12px;
+}
+
+.panel-title {
+  margin: 0 0 8px;
+  font-size: 13px;
+  letter-spacing: 0.02em;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 7px;
+}
+.row .label {
+  flex: 1;
+  color: var(--muted);
+}
+.row .select {
+  flex: 1;
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--text);
+  border: 1px solid var(--panel-border);
+  border-radius: 5px;
+  padding: 4px 6px;
+  font-size: 12px;
+}
+
+.btn {
+  flex: 1;
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--text);
+  border: 1px solid var(--panel-border);
+  border-radius: 5px;
+  padding: 5px 6px;
+  font-size: 12px;
+  cursor: pointer;
+}
+.btn:hover {
+  background: rgba(255, 255, 255, 0.16);
+}
+
+.toggles {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 4px;
+}
+.toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
+}
+
+/* ---- 3D CSS2D labels ------------------------------------------------------ */
+.label {
+  pointer-events: none;
+  text-align: center;
+  transform: translateY(-8px);
+  user-select: none;
+}
+.label-ko {
+  font-size: 13px;
+  font-weight: 600;
+  color: #fff;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.9);
+}
+.label-en {
+  font-size: 10px;
+  color: var(--muted);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.9);
+}
+
+.info-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+.info-table th,
+.info-table td {
+  text-align: left;
+  padding: 2px 4px;
+  vertical-align: top;
+}
+.info-table th {
+  color: var(--muted);
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.info-section + .info-section {
+  margin-top: 10px;
+  padding-top: 8px;
+  border-top: 1px solid var(--panel-border);
+}
+.section-title {
+  margin: 0 0 4px;
+  font-size: 11px;
+  letter-spacing: 0.03em;
+  color: var(--accent);
+  font-weight: 600;
+}
+.title-ko {
+  font-size: 15px;
+  font-weight: 700;
+}
+.title-en {
+  font-size: 11px;
+  color: var(--muted);
+  margin-top: 1px;
+}
+.children-block {
+  margin-top: 6px;
+}
+.children-title {
+  font-size: 11px;
+  color: var(--muted);
+  margin-bottom: 3px;
+}
+.children-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+.chip {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid var(--panel-border);
+  border-radius: 999px;
+  padding: 1px 7px;
+  font-size: 10px;
+}
+.empty-hint {
+  margin: 4px 0 0;
+  font-size: 11px;
+  color: var(--muted);
+}
+
+.sim-readout {
+  color: var(--text);
+  font-variant-numeric: tabular-nums;
+}
+
+.tip-ko {
+  font-weight: 600;
+}
+.tip-en,
+.tip-type {
+  color: var(--muted);
+  font-size: 11px;
+}
+
+@media (max-width: 720px) {
+  #control-panel {
+    right: 8px;
+    top: 8px;
+    width: 46%;
+    min-width: 168px;
+    font-size: 11px;
+  }
+  /* Info panel becomes a scrollable bottom sheet so it stays usable on small
+     screens without covering the control panel or blocking the 3D view. */
+  #info-panel {
+    top: auto;
+    bottom: 48px;
+    left: 8px;
+    right: 8px;
+    width: auto;
+    max-height: 42vh;
+    overflow-y: auto;
+    font-size: 11px;
+    z-index: 20;
+  }
+  #disclaimer {
+    bottom: 48px;
+  }
+  header#header {
+    top: 8px;
+    left: 8px;
+    padding: 6px 10px;
+  }
+  header#header h1 {
+    font-size: 13px;
+  }
+  header#header p {
+    display: none;
+  }
+  #ui-toggle {
+    right: 8px;
+    bottom: 8px;
+    padding: 6px 10px;
+    font-size: 11px;
+  }
+
+  /* Lower label density + smaller footprint on mobile: hide the secondary
+     English line and shrink the primary label so labels overlap less. */
+  .label-en {
+    display: none;
+  }
+  .label-ko {
+    font-size: 11px;
+  }
+  .label {
+    transform: translateY(-4px);
+  }
+}
