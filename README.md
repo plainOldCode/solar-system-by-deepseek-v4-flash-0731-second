@@ -1,6 +1,7 @@
 # Logarithmic Solar System
 
 > **한국어:** 이 문서의 한국어 버전은 [README.ko.md](README.ko.md)에서 볼 수 있습니다.
+> **prompt:** https://gist.github.com/plainOldCode/fb2e3ea48caada23107704628c2a9384
 
 An interactive 3D Solar System demo built with **Vite + TypeScript (strict) +
 Three.js**. It spans the Sun through Pluto plus the major moons, using real
